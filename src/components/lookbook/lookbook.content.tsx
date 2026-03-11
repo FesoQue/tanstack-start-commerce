@@ -28,7 +28,7 @@ function ProductCard({ product }: { product: Product }) {
       <button
         onClick={() =>
           navigate({
-            to: "/lookbook/$id",
+            to: "/products/$id",
             params: { id: product.id.toString() },
           })
         }

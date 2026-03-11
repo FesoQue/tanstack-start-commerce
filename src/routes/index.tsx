@@ -43,6 +43,7 @@ function HomePage() {
         <div className="flex flex-wrap items-center justify-center gap-3 pt-3">
           <button
             type="button"
+            onClick={() => navigate({ to: "/products" })}
             className="rounded-full bg-black px-5 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-gray-900"
           >
             Shop collection
@@ -122,6 +123,12 @@ function HomePage() {
                   </p>
                   <button
                     type="button"
+                    onClick={() =>
+                      navigate({
+                        to: "/products/$id",
+                        params: { id: product.id.toString() },
+                      })
+                    }
                     className="rounded-full border border-gray-200 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-gray-800 hover:bg-gray-50"
                   >
                     Add to bag
@@ -212,6 +219,12 @@ function HomePage() {
                   </p>
                   <button
                     type="button"
+                    onClick={() =>
+                      navigate({
+                        to: "/products/$id",
+                        params: { id: product.id.toString() },
+                      })
+                    }
                     className="rounded-full border border-gray-200 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-gray-800 hover:bg-gray-50"
                   >
                     Add
