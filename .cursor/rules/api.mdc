@@ -1,0 +1,5 @@
+---
+alwaysApply: true
+---
+
+API spec is defined in openapi.json at the project root. Always consult it before writing fetch/axios calls.

@@ -1,0 +1,25 @@
+A. For multiple dynamic route segments, you can structure your file like this:
+- `$postId.$reviewId.tsx`
+
+Here, `postId` and `reviewId` are the dynamic values (route params).
+
+
+B. You only reach for something like $postId.$reviewId.index.tsx when that route has children/siblings at the same level and you need a “default” page for /post/:postId/:reviewId.
+
+- If you just need /post/:postId/:reviewId (and nothing nested under it):
+
+Use $postId.$reviewId.tsx and you’re done.
+
+- If you want /post/:postId/:reviewId and also things like /post/:postId/:reviewId/edit or /post/:postId/:reviewId/settings:
+
+Then you’d do:
+
+- $postId.$reviewId.index.tsx → handles /post/:postId/:reviewId
+- $postId.$reviewId.edit.tsx → handles /post/:postId/:reviewId/edit
+- $postId.$reviewId.settings.tsx → handles /post/:postId/:reviewId/settings
+
+So: .index is for “this is the base/default page at this dynamic level, and I also have other routes hanging off the same level.”
+
+
+nested layout discussion:
+https://github.com/TanStack/router/discussions/1102
