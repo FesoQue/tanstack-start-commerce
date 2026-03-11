@@ -100,12 +100,14 @@ function HomePage() {
               className="group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white"
             >
               <div className="aspect-4/3 bg-gray-50 flex items-center justify-center overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="h-full w-full max-w-[250px] object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
+                <Link to="/products/$id" params={{ id: product.id.toString() }}>
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="h-full w-full max-w-[250px] object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </Link>
               </div>
               <div className="flex flex-1 flex-col gap-1 px-4 py-3 text-left">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-gray-400">
@@ -199,12 +201,14 @@ function HomePage() {
               className="group flex flex-col overflow-hidden rounded-xl border border-gray-100 bg-white hover:shadow-sm transition-shadow"
             >
               <div className="aspect-4/5 bg-gray-50 flex items-center justify-center overflow-hidden">
-                <img
-                  src={product.image}
-                  alt={product.title}
-                  className="h-full w-full max-w-[200px] object-contain p-4 transition-transform duration-300 group-hover:scale-105"
-                  loading="lazy"
-                />
+                <Link to="/products/$id" params={{ id: product.id.toString() }}>
+                  <img
+                    src={product.image}
+                    alt={product.title}
+                    className="h-full w-full max-w-[200px] object-contain p-4 transition-transform duration-300 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                </Link>
               </div>
               <div className="flex flex-1 flex-col gap-1 px-4 py-3 text-left">
                 <p className="text-[11px] uppercase tracking-[0.18em] text-gray-400">
