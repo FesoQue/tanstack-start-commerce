@@ -1,10 +1,50 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { signIn } from "#/lib/auth-client";
+import toast from "react-hot-toast";
+
+const loginSchema = z.object({
+  email: z.string().min(1, "Email is required").email(),
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters")
+    .max(128, "Password is too long"),
+});
+
+type LoginFormValues = z.infer<typeof loginSchema>;
 
 export const Route = createFileRoute("/(auth)/login")({
   component: LoginPage,
 });
 
 function LoginPage() {
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: "onBlur",
+  });
+
+  const onSubmit = async (values: LoginFormValues) => {
+    const { error } = await signIn.email({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (error) {
+      toast.error(error.message ?? "Invalid credentials");
+      return;
+    }
+
+    // router.navigate({ to: "/" });
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-2xl border border-gray-200 bg-white px-6 py-7 shadow-sm">
@@ -15,7 +55,11 @@ function LoginPage() {
           </p>
         </div>
 
-        <form className="space-y-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="space-y-4"
+          noValidate
+        >
           <div className="space-y-1.5 text-left">
             <label
               htmlFor="email"
@@ -27,9 +71,15 @@ function LoginPage() {
               id="email"
               type="email"
               autoComplete="email"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none ring-0 placeholder:text-gray-400 focus:border-gray-900"
               placeholder="you@example.com"
+              className={`w-full rounded-lg border px-3 py-2 text-sm outline-none ring-0 placeholder:text-gray-400 focus:border-gray-900 ${
+                errors.email ? "border-red-500" : "border-gray-200"
+              }`}
+              {...register("email")}
             />
+            {errors.email && (
+              <p className="text-xs text-red-500">{errors.email.message}</p>
+            )}
           </div>
 
           <div className="space-y-1.5 text-left">
@@ -43,16 +93,23 @@ function LoginPage() {
               id="password"
               type="password"
               autoComplete="current-password"
-              className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm outline-none ring-0 placeholder:text-gray-400 focus:border-gray-900"
               placeholder="••••••••"
+              className={`w-full rounded-lg border px-3 py-2 text-sm outline-none ring-0 placeholder:text-gray-400 focus:border-gray-900 ${
+                errors.password ? "border-red-500" : "border-gray-200"
+              }`}
+              {...register("password")}
             />
+            {errors.password && (
+              <p className="text-xs text-red-500">{errors.password.message}</p>
+            )}
           </div>
 
           <button
             type="submit"
-            className="mt-2 w-full rounded-full bg-black px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-gray-900"
+            disabled={isSubmitting}
+            className="mt-2 w-full rounded-full bg-black px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            Continue
+            {isSubmitting ? "Signing in..." : "Continue"}
           </button>
         </form>
       </div>

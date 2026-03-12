@@ -1,6 +1,5 @@
 import { CATEGORIES, LOOKS } from "#/lib/api/lookbook";
-import { productQueries } from "#/lib/api/products";
-import type { Product } from "#/lib/types";
+import { productQueries, type Product } from "#/lib/api/products";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";

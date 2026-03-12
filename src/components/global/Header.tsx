@@ -1,6 +1,10 @@
+import { useSession } from "#/lib/auth-client";
 import { Link } from "@tanstack/react-router";
 
 export default function Header() {
+  // const { data: session, isPending } = useSession();
+  // console.log(session);
+
   return (
     <header className="sticky top-0 z-50 border-b px-4 sm:px-8 lg:px-12 backdrop-blur-lg bg-white/80">
       <nav className="flex flex-wrap items-center justify-between gap-3 py-3 sm:py-4 max-w-6xl mx-auto">

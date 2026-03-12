@@ -2,8 +2,7 @@ import { Suspense } from "react";
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { LOOKS } from "#/lib/api/lookbook";
-import { productQueries } from "#/lib/api/products";
-import type { Product } from "#/lib/types";
+import { productQueries, type Product } from "#/lib/api/products";
 import { LookbookSkeleton } from "#/components/lookbook/lookbook.skeleton";
 import { LookbookError } from "#/components/lookbook/lookbook.error";
 

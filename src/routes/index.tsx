@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { productQueries } from "#/lib/api/products";
-import type { Product } from "#/lib/types";
+import { productQueries, type Product } from "#/lib/api/products";
 
 export const Route = createFileRoute("/")({
   loader: ({ context: { queryClient } }) =>
@@ -93,7 +92,7 @@ function HomePage() {
             View all stories
           </Link>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 grid-cols-2 md:grid-cols-3">
           {featured.map((product: Product) => (
             <article
               key={product.id}
@@ -119,7 +118,7 @@ function HomePage() {
                 <p className="mt-1 text-xs text-gray-500 line-clamp-2">
                   {product.description}
                 </p>
-                <div className="mt-3 flex items-center justify-between">
+                <div className="mt-3 flex flex-col md:flex-row gap-5 md:items-center md:justify-between">
                   <p className="text-sm font-semibold text-gray-900">
                     ${product.price.toFixed(2)}
                   </p>
@@ -194,7 +193,7 @@ function HomePage() {
             Showing {visibleProducts.length} items
           </p>
         </div>
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-5 grid-cols-2 lg:grid-cols-4">
           {visibleProducts.map((product: Product) => (
             <article
               key={product.id}

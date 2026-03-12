@@ -1,8 +1,7 @@
 import { Suspense } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
-import { productQueries } from "#/lib/api/products";
-import type { Product } from "#/lib/types";
+import { productQueries, type Product } from "#/lib/api/products";
 import { ProductsSkeleton } from "#/components/products/product.skeleton";
 
 export const Route = createFileRoute("/products/$id")({

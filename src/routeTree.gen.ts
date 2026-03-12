@@ -16,10 +16,12 @@ import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as LookbookIndexRouteImport } from './routes/lookbook/index'
 import { Route as ProductsIdRouteImport } from './routes/products/$id'
 import { Route as LookbookIdRouteImport } from './routes/lookbook/$id'
+import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
 import { Route as DashboardAdminOverviewRouteImport } from './routes/dashboard/admin/overview'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as DashboardAdminComponentsSidebarRouteImport } from './routes/dashboard/admin/_components/sidebar'
 
 const PostsRoute = PostsRouteImport.update({
@@ -56,6 +58,11 @@ const LookbookIdRoute = LookbookIdRouteImport.update({
   path: '/lookbook/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authVerifyRoute = authVerifyRouteImport.update({
+  id: '/verify',
+  path: '/verify',
+  getParentRoute: () => authRouteRoute,
+} as any)
 const authSignupRoute = authSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
@@ -76,6 +83,11 @@ const DashboardAdminOverviewRoute = DashboardAdminOverviewRouteImport.update({
   path: '/overview',
   getParentRoute: () => DashboardAdminRouteRoute,
 } as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardAdminComponentsSidebarRoute =
   DashboardAdminComponentsSidebarRouteImport.update({
     id: '/_components/sidebar',
@@ -89,10 +101,12 @@ export interface FileRoutesByFullPath {
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/verify': typeof authVerifyRoute
   '/lookbook/$id': typeof LookbookIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/lookbook/': typeof LookbookIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/admin/overview': typeof DashboardAdminOverviewRoute
   '/dashboard/admin/sidebar': typeof DashboardAdminComponentsSidebarRoute
 }
@@ -102,10 +116,12 @@ export interface FileRoutesByTo {
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/login': typeof authLoginRoute
   '/signup': typeof authSignupRoute
+  '/verify': typeof authVerifyRoute
   '/lookbook/$id': typeof LookbookIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/lookbook': typeof LookbookIndexRoute
   '/products': typeof ProductsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/admin/overview': typeof DashboardAdminOverviewRoute
   '/dashboard/admin/sidebar': typeof DashboardAdminComponentsSidebarRoute
 }
@@ -117,10 +133,12 @@ export interface FileRoutesById {
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/signup': typeof authSignupRoute
+  '/(auth)/verify': typeof authVerifyRoute
   '/lookbook/$id': typeof LookbookIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/lookbook/': typeof LookbookIndexRoute
   '/products/': typeof ProductsIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
   '/dashboard/admin/overview': typeof DashboardAdminOverviewRoute
   '/dashboard/admin/_components/sidebar': typeof DashboardAdminComponentsSidebarRoute
 }
@@ -132,10 +150,12 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/login'
     | '/signup'
+    | '/verify'
     | '/lookbook/$id'
     | '/products/$id'
     | '/lookbook/'
     | '/products/'
+    | '/api/auth/$'
     | '/dashboard/admin/overview'
     | '/dashboard/admin/sidebar'
   fileRoutesByTo: FileRoutesByTo
@@ -145,10 +165,12 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/login'
     | '/signup'
+    | '/verify'
     | '/lookbook/$id'
     | '/products/$id'
     | '/lookbook'
     | '/products'
+    | '/api/auth/$'
     | '/dashboard/admin/overview'
     | '/dashboard/admin/sidebar'
   id:
@@ -159,10 +181,12 @@ export interface FileRouteTypes {
     | '/dashboard/admin'
     | '/(auth)/login'
     | '/(auth)/signup'
+    | '/(auth)/verify'
     | '/lookbook/$id'
     | '/products/$id'
     | '/lookbook/'
     | '/products/'
+    | '/api/auth/$'
     | '/dashboard/admin/overview'
     | '/dashboard/admin/_components/sidebar'
   fileRoutesById: FileRoutesById
@@ -176,6 +200,7 @@ export interface RootRouteChildren {
   ProductsIdRoute: typeof ProductsIdRoute
   LookbookIndexRoute: typeof LookbookIndexRoute
   ProductsIndexRoute: typeof ProductsIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -229,6 +254,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LookbookIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/verify': {
+      id: '/(auth)/verify'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof authVerifyRouteImport
+      parentRoute: typeof authRouteRoute
+    }
     '/(auth)/signup': {
       id: '/(auth)/signup'
       path: '/signup'
@@ -257,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardAdminOverviewRouteImport
       parentRoute: typeof DashboardAdminRouteRoute
     }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard/admin/_components/sidebar': {
       id: '/dashboard/admin/_components/sidebar'
       path: '/sidebar'
@@ -270,11 +309,13 @@ declare module '@tanstack/react-router' {
 interface authRouteRouteChildren {
   authLoginRoute: typeof authLoginRoute
   authSignupRoute: typeof authSignupRoute
+  authVerifyRoute: typeof authVerifyRoute
 }
 
 const authRouteRouteChildren: authRouteRouteChildren = {
   authLoginRoute: authLoginRoute,
   authSignupRoute: authSignupRoute,
+  authVerifyRoute: authVerifyRoute,
 }
 
 const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
@@ -303,6 +344,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProductsIdRoute: ProductsIdRoute,
   LookbookIndexRoute: LookbookIndexRoute,
   ProductsIndexRoute: ProductsIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -59,7 +59,8 @@ export default function ThemeToggle() {
       mode === "light" ? "dark" : mode === "dark" ? "auto" : "light";
     setMode(nextMode);
     applyThemeMode(nextMode);
-    window.localStorage.setItem("theme", nextMode);
+    window.localStorage.setItem("theme", "light");
+    // window.localStorage.setItem("theme", nextMode);
   }
 
   const label =

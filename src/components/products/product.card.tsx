@@ -1,4 +1,4 @@
-import type { Product } from "#/lib/types";
+import type { Product } from "#/lib/api/products";
 import { Link } from "@tanstack/react-router";
 
 export function ProductCard({ product }: { product: Product }) {

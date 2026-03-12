@@ -1,6 +1,14 @@
 import { queryOptions } from "@tanstack/react-query";
-import { client } from "./client";
-import type { Product } from "../types";
+import { client } from "./axios-client";
+
+export type Product = {
+  id: number;
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
+};
 
 export const productsApi = {
   getAll: () => client.get<Product[]>("/products").then((r) => r.data),
