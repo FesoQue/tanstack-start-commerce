@@ -2,13 +2,11 @@ import { useSession } from "#/lib/auth-client";
 import { createFileRoute, Outlet, useRouter } from "@tanstack/react-router";
 import { useEffect } from "react";
 
-const isBrowser = typeof window !== "undefined";
-
 export const Route = createFileRoute("/(auth)")({
-  component: LayoutComponent,
+  component: AuthLayoutComponent,
 });
 
-function LayoutComponent() {
+function AuthLayoutComponent() {
   const router = useRouter();
   const { data: session } = useSession();
 

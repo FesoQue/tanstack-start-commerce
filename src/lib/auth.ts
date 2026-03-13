@@ -14,11 +14,21 @@ export const auth = betterAuth({
   database: mongodbAdapter(db),
   emailAndPassword: {
     enabled: true,
+    sendResetPassword: async ({ user, url }) => {
+      await resend.emails.send({
+        from: "onboarding@resend.dev",
+        to: user.email,
+        subject: "Reset your password",
+        html: `<p>Click the link below to reset your password. If you did not request this, you can safely ignore this email.</p>
+               <p><a href="${url}">Reset password</a></p>`,
+      });
+    },
   },
   plugins: [
     emailOTP({
       otpLength: 6,
       expiresIn: 3600,
+      allowedAttempts: 3,
       overrideDefaultEmailVerification: true,
       async sendVerificationOTP({ email, otp, type }) {
         if (type === "email-verification") {

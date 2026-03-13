@@ -2,57 +2,58 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { signIn } from "#/lib/auth-client";
 import toast from "react-hot-toast";
+import { requestPasswordReset } from "#/lib/auth-client";
 
-const loginSchema = z.object({
+const forgotPasswordSchema = z.object({
   email: z.string().min(1, "Email is required").email(),
-  password: z
-    .string()
-    .min(6, "Password must be at least 6 characters")
-    .max(128, "Password is too long"),
 });
 
-type LoginFormValues = z.infer<typeof loginSchema>;
+type ForgotPasswordFormValues = z.infer<typeof forgotPasswordSchema>;
 
-export const Route = createFileRoute("/(auth)/login")({
-  component: LoginPage,
+export const Route = createFileRoute("/(auth)/forgot-password")({
+  component: ForgotPasswordPage,
 });
 
-function LoginPage() {
+function ForgotPasswordPage() {
   const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginFormValues>({
-    resolver: zodResolver(loginSchema),
+  } = useForm<ForgotPasswordFormValues>({
+    resolver: zodResolver(forgotPasswordSchema),
     mode: "onBlur",
   });
 
-  const onSubmit = async (values: LoginFormValues) => {
-    const { error } = await signIn.email({
+  const onSubmit = async (values: ForgotPasswordFormValues) => {
+    const { error } = await requestPasswordReset({
       email: values.email,
-      password: values.password,
+      redirectTo: `${import.meta.env.VITE_APP_URL}/reset-password`,
     });
 
     if (error) {
-      toast.error(error.message ?? "Invalid credentials");
+      toast.error(error.message ?? "Error sending password reset email");
       return;
     }
 
-    toast.success("Login successful!");
-    router.navigate({ to: "/" });
+    toast.success(
+      "If an account exists for this email, a reset link will be sent."
+    );
+    router.navigate({ to: "/login" });
   };
 
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-2xl border border-gray-200 bg-white px-6 py-7 shadow-sm">
         <div className="mb-6 space-y-1 text-center">
-          <h1 className="text-xl font-semibold tracking-tight">Log in</h1>
+          <h1 className="text-xl font-semibold tracking-tight">
+            Forgot password
+          </h1>
           <p className="text-xs text-gray-500">
-            Enter your email and password to access your account.
+            Enter your email and we&apos;ll send you a link to reset your
+            password.
           </p>
         </div>
 
@@ -83,44 +84,12 @@ function LoginPage() {
             )}
           </div>
 
-          <div className="space-y-1.5 text-left">
-            <label
-              htmlFor="password"
-              className="block text-xs font-medium uppercase tracking-[0.16em] text-gray-500"
-            >
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              autoComplete="current-password"
-              placeholder="••••••••"
-              className={`w-full rounded-lg border px-3 py-2 text-sm outline-none ring-0 placeholder:text-gray-400 focus:border-gray-900 ${
-                errors.password ? "border-red-500" : "border-gray-200"
-              }`}
-              {...register("password")}
-            />
-            {errors.password && (
-              <p className="text-xs text-red-500">{errors.password.message}</p>
-            )}
-          </div>
-
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={() => router.navigate({ to: "/forgot-password" })}
-              className="text-[11px] font-medium text-gray-500 underline-offset-2 hover:text-gray-800 hover:underline"
-            >
-              Forgot password?
-            </button>
-          </div>
-
           <button
             type="submit"
             disabled={isSubmitting}
             className="mt-2 w-full rounded-full bg-black px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-gray-900 disabled:cursor-not-allowed disabled:opacity-70"
           >
-            {isSubmitting ? "Signing in..." : "Continue"}
+            {isSubmitting ? "Sending link..." : "Send reset link"}
           </button>
         </form>
       </div>

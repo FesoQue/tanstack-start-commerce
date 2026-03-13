@@ -8,12 +8,12 @@ import { LookbookContent } from "#/components/lookbook/lookbook.content";
 export const Route = createFileRoute("/lookbook/")({
   loader: ({ context: { queryClient } }) =>
     queryClient.ensureQueryData(productQueries.all()),
-  component: LookBookComponent,
+  component: LookBookPage,
   pendingComponent: LookbookSkeleton,
   errorComponent: LookbookError,
 });
 
-function LookBookComponent() {
+function LookBookPage() {
   return (
     <Suspense fallback={<LookbookSkeleton />}>
       <LookbookContent />

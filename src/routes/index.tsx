@@ -86,7 +86,7 @@ function HomePage() {
             Featured
           </h2>
           <Link
-            to="/posts"
+            to="/"
             className="text-xs font-medium text-gray-500 hover:text-gray-800 underline-offset-4 hover:underline"
           >
             View all stories
@@ -149,7 +149,6 @@ function HomePage() {
             </h2>
           </div>
           <div className="flex flex-wrap gap-2">
-            button{" "}
             <button
               type="button"
               onClick={() => setActiveCategory(null)}

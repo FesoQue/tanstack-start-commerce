@@ -20,12 +20,12 @@ export const Route = createFileRoute("/lookbook/$id")({
 
     return { look };
   },
-  component: LookBookDetailComponent,
+  component: LookBookDetailPage,
   pendingComponent: LookbookSkeleton,
   errorComponent: LookbookError,
 });
 
-function LookBookDetailComponent() {
+function LookBookDetailPage() {
   const { look } = Route.useLoaderData();
   const { data: products } = useSuspenseQuery(productQueries.all());
 

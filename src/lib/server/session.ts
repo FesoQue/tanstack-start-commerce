@@ -1,15 +1,13 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getHeaders } from "vinxi/http";
-import { auth } from "../auth";
+import { getRequest } from "@tanstack/react-start/server";
+import { auth } from "#/lib/auth";
 
 export const getSessionFn = createServerFn({ method: "GET" }).handler(
   async () => {
-    const headers = getHeaders();
-
+    const request = getRequest();
     const session = await auth.api.getSession({
-      headers: new Headers(headers as HeadersInit),
+      headers: request.headers,
     });
-
-    return session;
+    return session ?? null;
   }
 );

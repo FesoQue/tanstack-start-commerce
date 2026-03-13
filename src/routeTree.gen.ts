@@ -9,7 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PostsRouteImport } from './routes/posts'
+import { Route as CartRouteImport } from './routes/cart'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProductsIndexRouteImport } from './routes/products/index'
@@ -18,15 +18,17 @@ import { Route as ProductsIdRouteImport } from './routes/products/$id'
 import { Route as LookbookIdRouteImport } from './routes/lookbook/$id'
 import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
+import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
+import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
 import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
 import { Route as DashboardAdminOverviewRouteImport } from './routes/dashboard/admin/overview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as DashboardAdminComponentsSidebarRouteImport } from './routes/dashboard/admin/_components/sidebar'
 
-const PostsRoute = PostsRouteImport.update({
-  id: '/posts',
-  path: '/posts',
+const CartRoute = CartRouteImport.update({
+  id: '/cart',
+  path: '/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authRouteRoute = authRouteRouteImport.update({
@@ -68,9 +70,19 @@ const authSignupRoute = authSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => authRouteRoute,
 } as any)
+const authResetPasswordRoute = authResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => authRouteRoute,
+} as any)
 const authLoginRoute = authLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => authRouteRoute,
+} as any)
+const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => authRouteRoute,
 } as any)
 const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
@@ -97,9 +109,11 @@ const DashboardAdminComponentsSidebarRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/posts': typeof PostsRoute
+  '/cart': typeof CartRoute
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
+  '/reset-password': typeof authResetPasswordRoute
   '/signup': typeof authSignupRoute
   '/verify': typeof authVerifyRoute
   '/lookbook/$id': typeof LookbookIdRoute
@@ -112,9 +126,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/posts': typeof PostsRoute
+  '/cart': typeof CartRoute
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
+  '/reset-password': typeof authResetPasswordRoute
   '/signup': typeof authSignupRoute
   '/verify': typeof authVerifyRoute
   '/lookbook/$id': typeof LookbookIdRoute
@@ -129,9 +145,11 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/(auth)': typeof authRouteRouteWithChildren
-  '/posts': typeof PostsRoute
+  '/cart': typeof CartRoute
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
+  '/(auth)/reset-password': typeof authResetPasswordRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(auth)/verify': typeof authVerifyRoute
   '/lookbook/$id': typeof LookbookIdRoute
@@ -146,9 +164,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/posts'
+    | '/cart'
     | '/dashboard/admin'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/verify'
     | '/lookbook/$id'
@@ -161,9 +181,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/posts'
+    | '/cart'
     | '/dashboard/admin'
+    | '/forgot-password'
     | '/login'
+    | '/reset-password'
     | '/signup'
     | '/verify'
     | '/lookbook/$id'
@@ -177,9 +199,11 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/(auth)'
-    | '/posts'
+    | '/cart'
     | '/dashboard/admin'
+    | '/(auth)/forgot-password'
     | '/(auth)/login'
+    | '/(auth)/reset-password'
     | '/(auth)/signup'
     | '/(auth)/verify'
     | '/lookbook/$id'
@@ -194,7 +218,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authRouteRoute: typeof authRouteRouteWithChildren
-  PostsRoute: typeof PostsRoute
+  CartRoute: typeof CartRoute
   DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
   LookbookIdRoute: typeof LookbookIdRoute
   ProductsIdRoute: typeof ProductsIdRoute
@@ -205,11 +229,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/posts': {
-      id: '/posts'
-      path: '/posts'
-      fullPath: '/posts'
-      preLoaderRoute: typeof PostsRouteImport
+    '/cart': {
+      id: '/cart'
+      path: '/cart'
+      fullPath: '/cart'
+      preLoaderRoute: typeof CartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)': {
@@ -268,11 +292,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authSignupRouteImport
       parentRoute: typeof authRouteRoute
     }
+    '/(auth)/reset-password': {
+      id: '/(auth)/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof authResetPasswordRouteImport
+      parentRoute: typeof authRouteRoute
+    }
     '/(auth)/login': {
       id: '/(auth)/login'
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof authLoginRouteImport
+      parentRoute: typeof authRouteRoute
+    }
+    '/(auth)/forgot-password': {
+      id: '/(auth)/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof authRouteRoute
     }
     '/dashboard/admin': {
@@ -307,13 +345,17 @@ declare module '@tanstack/react-router' {
 }
 
 interface authRouteRouteChildren {
+  authForgotPasswordRoute: typeof authForgotPasswordRoute
   authLoginRoute: typeof authLoginRoute
+  authResetPasswordRoute: typeof authResetPasswordRoute
   authSignupRoute: typeof authSignupRoute
   authVerifyRoute: typeof authVerifyRoute
 }
 
 const authRouteRouteChildren: authRouteRouteChildren = {
+  authForgotPasswordRoute: authForgotPasswordRoute,
   authLoginRoute: authLoginRoute,
+  authResetPasswordRoute: authResetPasswordRoute,
   authSignupRoute: authSignupRoute,
   authVerifyRoute: authVerifyRoute,
 }
@@ -338,7 +380,7 @@ const DashboardAdminRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRouteRoute: authRouteRouteWithChildren,
-  PostsRoute: PostsRoute,
+  CartRoute: CartRoute,
   DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
   LookbookIdRoute: LookbookIdRoute,
   ProductsIdRoute: ProductsIdRoute,
