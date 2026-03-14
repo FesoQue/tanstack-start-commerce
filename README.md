@@ -1,6 +1,6 @@
 # TS Commerce
 
-A minimalistic, full-stack e-commerce storefront built with TanStack Start, featuring authentication, a product catalogue, cart, wishlist, and checkout.
+A minimalistic, full-stack e-commerce storefront built with TanStack Start, featuring authentication, a product catalogue, cart, wishlist, and checkout — using FakeStoreAPI as the product data source.
 
 ---
 

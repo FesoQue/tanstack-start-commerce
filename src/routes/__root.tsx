@@ -25,12 +25,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           name: "viewport",
           content: "width=device-width, initial-scale=1",
         },
-        {
-          title: "TanStack Start Starter",
-        },
         ...seo({
-          title: "A Simple Blog",
-          description: `A simple blog using TanStack Start, a type-safe, client-first, full-stack React framework. `,
+          title: "Tanstack Start Commerce",
+          description: `A minimalistic e-commerce storefront exploring TanStack Start — featuring a product catalogue, lookbook, cart, wishlist, and full authentication.`,
         }),
       ],
       links: [
