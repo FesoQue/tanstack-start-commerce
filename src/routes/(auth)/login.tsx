@@ -44,7 +44,8 @@ function LoginPage() {
       return;
     }
 
-    // Invalidate cart so the header count refetches with the new session
+    // Invalidate cart & wishlist so the header count refetches with the new session
+    await queryClient.invalidateQueries({ queryKey: ["wishlist"] });
     await queryClient.invalidateQueries({ queryKey: ["cart"] });
 
     toast.success("Login successful!");

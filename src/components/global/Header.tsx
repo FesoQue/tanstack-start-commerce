@@ -1,13 +1,16 @@
 import { useSession, signOut } from "#/lib/auth-client";
 import { useCart, getCartCount } from "#/lib/api/cart";
+import { useWishlist } from "#/lib/api/wishlist";
 import { Link } from "@tanstack/react-router";
-import { ShoppingCart } from "lucide-react";
+import { ShoppingCart, Heart } from "lucide-react";
 import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
   const { data: session, isPending } = useSession();
   const { data: cart } = useCart();
+  const { data: wishlist } = useWishlist();
+  const wishlistCount = wishlist.items.length;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
   const cartCount = getCartCount(cart);
@@ -17,12 +20,14 @@ export default function Header() {
     setIsMenuOpen(false);
     setIsNavOpen(false);
     await signOut();
-    // Immediately wipe the cart from cache so stale items don't show
-    queryClient.setQueryData(["cart"], {
+    // Immediately wipe session-dependent caches (cart & wishlist) so stale data doesn't show
+    const empty = {
       userId: null,
       items: [],
       updatedAt: new Date().toISOString(),
-    });
+    };
+    queryClient.setQueryData(["cart"], empty);
+    queryClient.setQueryData(["wishlist"], empty);
   };
 
   return (
@@ -40,7 +45,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden flex-1 items-center justify-end gap-8 text-xs sm:flex lg:gap-12 sm:text-sm">
+          <div className="hidden items-center gap-8 text-xs sm:flex lg:gap-12 sm:text-sm">
             <Link
               to="/"
               activeProps={{ className: "font-bold" }}
@@ -61,6 +66,18 @@ export default function Header() {
               className="text-gray-700 hover:text-black"
             >
               Look Book
+            </Link>
+          </div>
+          <div className="hidden items-center gap-4 text-xs sm:flex lg:gap-6 sm:text-sm">
+            <Link to="/wishlist" className="relative">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50">
+                <Heart className="h-4 w-4" />
+              </div>
+              {wishlistCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-medium text-white">
+                  {wishlistCount > 9 ? "9+" : wishlistCount}
+                </span>
+              )}
             </Link>
             <Link to="/cart" className="relative">
               <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50">
@@ -130,10 +147,23 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="sm:hidden flex items-center gap-8">
+          {/* mobile nav items */}
+          <div className="sm:hidden flex items-center gap-6">
+            <Link
+              to="/wishlist"
+              className="relative text-gray-700 hover:text-black"
+              onClick={() => setIsNavOpen(false)}
+            >
+              <Heart className="h-5 w-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute -right-1.5 -top-1.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-medium text-white">
+                  {wishlistCount > 9 ? "9+" : wishlistCount}
+                </span>
+              )}
+            </Link>
             <Link
               to="/cart"
-              className="relative inline-flex items-center gap-2 text-gray-700 hover:text-black "
+              className="relative inline-flex items-center gap-2 text-gray-700 hover:text-black"
               onClick={() => setIsNavOpen(false)}
             >
               <ShoppingCart className="h-5 w-5" />
@@ -143,8 +173,6 @@ export default function Header() {
                 </span>
               )}
             </Link>
-
-            {/* Mobile hamburger */}
             <button
               type="button"
               className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 sm:hidden"
@@ -159,7 +187,7 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Mobile nav */}
+        {/* Mobile nav menu list */}
         {isNavOpen && (
           <div className="mt-3 flex flex-col gap-3 border-t border-gray-200 pt-3 text-sm sm:hidden">
             <div className="flex flex-col gap-2">

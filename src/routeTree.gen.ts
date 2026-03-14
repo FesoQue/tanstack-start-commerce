@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as WishlistRouteImport } from './routes/wishlist'
 import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
@@ -23,11 +24,13 @@ import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
 import { Route as authLoginRouteImport } from './routes/(auth)/login'
 import { Route as authForgotPasswordRouteImport } from './routes/(auth)/forgot-password'
-import { Route as DashboardAdminRouteRouteImport } from './routes/dashboard/admin/route'
-import { Route as DashboardAdminOverviewRouteImport } from './routes/dashboard/admin/overview'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
-import { Route as DashboardAdminComponentsSidebarRouteImport } from './routes/dashboard/admin/_components/sidebar'
 
+const WishlistRoute = WishlistRouteImport.update({
+  id: '/wishlist',
+  path: '/wishlist',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CheckoutRoute = CheckoutRouteImport.update({
   id: '/checkout',
   path: '/checkout',
@@ -97,33 +100,17 @@ const authForgotPasswordRoute = authForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => authRouteRoute,
 } as any)
-const DashboardAdminRouteRoute = DashboardAdminRouteRouteImport.update({
-  id: '/dashboard/admin',
-  path: '/dashboard/admin',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DashboardAdminOverviewRoute = DashboardAdminOverviewRouteImport.update({
-  id: '/overview',
-  path: '/overview',
-  getParentRoute: () => DashboardAdminRouteRoute,
-} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DashboardAdminComponentsSidebarRoute =
-  DashboardAdminComponentsSidebarRouteImport.update({
-    id: '/_components/sidebar',
-    path: '/sidebar',
-    getParentRoute: () => DashboardAdminRouteRoute,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
-  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/wishlist': typeof WishlistRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/reset-password': typeof authResetPasswordRoute
@@ -135,14 +122,12 @@ export interface FileRoutesByFullPath {
   '/lookbook/': typeof LookbookIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/dashboard/admin/overview': typeof DashboardAdminOverviewRoute
-  '/dashboard/admin/sidebar': typeof DashboardAdminComponentsSidebarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
-  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/wishlist': typeof WishlistRoute
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/reset-password': typeof authResetPasswordRoute
@@ -154,8 +139,6 @@ export interface FileRoutesByTo {
   '/lookbook': typeof LookbookIndexRoute
   '/products': typeof ProductsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/dashboard/admin/overview': typeof DashboardAdminOverviewRoute
-  '/dashboard/admin/sidebar': typeof DashboardAdminComponentsSidebarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -163,7 +146,7 @@ export interface FileRoutesById {
   '/(auth)': typeof authRouteRouteWithChildren
   '/cart': typeof CartRoute
   '/checkout': typeof CheckoutRoute
-  '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
+  '/wishlist': typeof WishlistRoute
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/reset-password': typeof authResetPasswordRoute
@@ -175,8 +158,6 @@ export interface FileRoutesById {
   '/lookbook/': typeof LookbookIndexRoute
   '/products/': typeof ProductsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
-  '/dashboard/admin/overview': typeof DashboardAdminOverviewRoute
-  '/dashboard/admin/_components/sidebar': typeof DashboardAdminComponentsSidebarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -184,7 +165,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cart'
     | '/checkout'
-    | '/dashboard/admin'
+    | '/wishlist'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
@@ -196,14 +177,12 @@ export interface FileRouteTypes {
     | '/lookbook/'
     | '/products/'
     | '/api/auth/$'
-    | '/dashboard/admin/overview'
-    | '/dashboard/admin/sidebar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/cart'
     | '/checkout'
-    | '/dashboard/admin'
+    | '/wishlist'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
@@ -215,15 +194,13 @@ export interface FileRouteTypes {
     | '/lookbook'
     | '/products'
     | '/api/auth/$'
-    | '/dashboard/admin/overview'
-    | '/dashboard/admin/sidebar'
   id:
     | '__root__'
     | '/'
     | '/(auth)'
     | '/cart'
     | '/checkout'
-    | '/dashboard/admin'
+    | '/wishlist'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
     | '/(auth)/reset-password'
@@ -235,8 +212,6 @@ export interface FileRouteTypes {
     | '/lookbook/'
     | '/products/'
     | '/api/auth/$'
-    | '/dashboard/admin/overview'
-    | '/dashboard/admin/_components/sidebar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -244,7 +219,7 @@ export interface RootRouteChildren {
   authRouteRoute: typeof authRouteRouteWithChildren
   CartRoute: typeof CartRoute
   CheckoutRoute: typeof CheckoutRoute
-  DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
+  WishlistRoute: typeof WishlistRoute
   ApiCartRoute: typeof ApiCartRoute
   LookbookIdRoute: typeof LookbookIdRoute
   ProductsIdRoute: typeof ProductsIdRoute
@@ -255,6 +230,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/wishlist': {
+      id: '/wishlist'
+      path: '/wishlist'
+      fullPath: '/wishlist'
+      preLoaderRoute: typeof WishlistRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/checkout': {
       id: '/checkout'
       path: '/checkout'
@@ -353,33 +335,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authForgotPasswordRouteImport
       parentRoute: typeof authRouteRoute
     }
-    '/dashboard/admin': {
-      id: '/dashboard/admin'
-      path: '/dashboard/admin'
-      fullPath: '/dashboard/admin'
-      preLoaderRoute: typeof DashboardAdminRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/admin/overview': {
-      id: '/dashboard/admin/overview'
-      path: '/overview'
-      fullPath: '/dashboard/admin/overview'
-      preLoaderRoute: typeof DashboardAdminOverviewRouteImport
-      parentRoute: typeof DashboardAdminRouteRoute
-    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/dashboard/admin/_components/sidebar': {
-      id: '/dashboard/admin/_components/sidebar'
-      path: '/sidebar'
-      fullPath: '/dashboard/admin/sidebar'
-      preLoaderRoute: typeof DashboardAdminComponentsSidebarRouteImport
-      parentRoute: typeof DashboardAdminRouteRoute
     }
   }
 }
@@ -404,25 +365,12 @@ const authRouteRouteWithChildren = authRouteRoute._addFileChildren(
   authRouteRouteChildren,
 )
 
-interface DashboardAdminRouteRouteChildren {
-  DashboardAdminOverviewRoute: typeof DashboardAdminOverviewRoute
-  DashboardAdminComponentsSidebarRoute: typeof DashboardAdminComponentsSidebarRoute
-}
-
-const DashboardAdminRouteRouteChildren: DashboardAdminRouteRouteChildren = {
-  DashboardAdminOverviewRoute: DashboardAdminOverviewRoute,
-  DashboardAdminComponentsSidebarRoute: DashboardAdminComponentsSidebarRoute,
-}
-
-const DashboardAdminRouteRouteWithChildren =
-  DashboardAdminRouteRoute._addFileChildren(DashboardAdminRouteRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRouteRoute: authRouteRouteWithChildren,
   CartRoute: CartRoute,
   CheckoutRoute: CheckoutRoute,
-  DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
+  WishlistRoute: WishlistRoute,
   ApiCartRoute: ApiCartRoute,
   LookbookIdRoute: LookbookIdRoute,
   ProductsIdRoute: ProductsIdRoute,
