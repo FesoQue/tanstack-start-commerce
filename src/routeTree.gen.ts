@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as CheckoutRouteImport } from './routes/checkout'
 import { Route as CartRouteImport } from './routes/cart'
 import { Route as authRouteRouteImport } from './routes/(auth)/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -16,6 +17,7 @@ import { Route as ProductsIndexRouteImport } from './routes/products/index'
 import { Route as LookbookIndexRouteImport } from './routes/lookbook/index'
 import { Route as ProductsIdRouteImport } from './routes/products/$id'
 import { Route as LookbookIdRouteImport } from './routes/lookbook/$id'
+import { Route as ApiCartRouteImport } from './routes/api/cart'
 import { Route as authVerifyRouteImport } from './routes/(auth)/verify'
 import { Route as authSignupRouteImport } from './routes/(auth)/signup'
 import { Route as authResetPasswordRouteImport } from './routes/(auth)/reset-password'
@@ -26,6 +28,11 @@ import { Route as DashboardAdminOverviewRouteImport } from './routes/dashboard/a
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 import { Route as DashboardAdminComponentsSidebarRouteImport } from './routes/dashboard/admin/_components/sidebar'
 
+const CheckoutRoute = CheckoutRouteImport.update({
+  id: '/checkout',
+  path: '/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CartRoute = CartRouteImport.update({
   id: '/cart',
   path: '/cart',
@@ -58,6 +65,11 @@ const ProductsIdRoute = ProductsIdRouteImport.update({
 const LookbookIdRoute = LookbookIdRouteImport.update({
   id: '/lookbook/$id',
   path: '/lookbook/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCartRoute = ApiCartRouteImport.update({
+  id: '/api/cart',
+  path: '/api/cart',
   getParentRoute: () => rootRouteImport,
 } as any)
 const authVerifyRoute = authVerifyRouteImport.update({
@@ -110,12 +122,14 @@ const DashboardAdminComponentsSidebarRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/reset-password': typeof authResetPasswordRoute
   '/signup': typeof authSignupRoute
   '/verify': typeof authVerifyRoute
+  '/api/cart': typeof ApiCartRoute
   '/lookbook/$id': typeof LookbookIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/lookbook/': typeof LookbookIndexRoute
@@ -127,12 +141,14 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/forgot-password': typeof authForgotPasswordRoute
   '/login': typeof authLoginRoute
   '/reset-password': typeof authResetPasswordRoute
   '/signup': typeof authSignupRoute
   '/verify': typeof authVerifyRoute
+  '/api/cart': typeof ApiCartRoute
   '/lookbook/$id': typeof LookbookIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/lookbook': typeof LookbookIndexRoute
@@ -146,12 +162,14 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/(auth)': typeof authRouteRouteWithChildren
   '/cart': typeof CartRoute
+  '/checkout': typeof CheckoutRoute
   '/dashboard/admin': typeof DashboardAdminRouteRouteWithChildren
   '/(auth)/forgot-password': typeof authForgotPasswordRoute
   '/(auth)/login': typeof authLoginRoute
   '/(auth)/reset-password': typeof authResetPasswordRoute
   '/(auth)/signup': typeof authSignupRoute
   '/(auth)/verify': typeof authVerifyRoute
+  '/api/cart': typeof ApiCartRoute
   '/lookbook/$id': typeof LookbookIdRoute
   '/products/$id': typeof ProductsIdRoute
   '/lookbook/': typeof LookbookIndexRoute
@@ -165,12 +183,14 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/cart'
+    | '/checkout'
     | '/dashboard/admin'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
     | '/signup'
     | '/verify'
+    | '/api/cart'
     | '/lookbook/$id'
     | '/products/$id'
     | '/lookbook/'
@@ -182,12 +202,14 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/cart'
+    | '/checkout'
     | '/dashboard/admin'
     | '/forgot-password'
     | '/login'
     | '/reset-password'
     | '/signup'
     | '/verify'
+    | '/api/cart'
     | '/lookbook/$id'
     | '/products/$id'
     | '/lookbook'
@@ -200,12 +222,14 @@ export interface FileRouteTypes {
     | '/'
     | '/(auth)'
     | '/cart'
+    | '/checkout'
     | '/dashboard/admin'
     | '/(auth)/forgot-password'
     | '/(auth)/login'
     | '/(auth)/reset-password'
     | '/(auth)/signup'
     | '/(auth)/verify'
+    | '/api/cart'
     | '/lookbook/$id'
     | '/products/$id'
     | '/lookbook/'
@@ -219,7 +243,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   authRouteRoute: typeof authRouteRouteWithChildren
   CartRoute: typeof CartRoute
+  CheckoutRoute: typeof CheckoutRoute
   DashboardAdminRouteRoute: typeof DashboardAdminRouteRouteWithChildren
+  ApiCartRoute: typeof ApiCartRoute
   LookbookIdRoute: typeof LookbookIdRoute
   ProductsIdRoute: typeof ProductsIdRoute
   LookbookIndexRoute: typeof LookbookIndexRoute
@@ -229,6 +255,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/checkout': {
+      id: '/checkout'
+      path: '/checkout'
+      fullPath: '/checkout'
+      preLoaderRoute: typeof CheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cart': {
       id: '/cart'
       path: '/cart'
@@ -276,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: '/lookbook/$id'
       fullPath: '/lookbook/$id'
       preLoaderRoute: typeof LookbookIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cart': {
+      id: '/api/cart'
+      path: '/api/cart'
+      fullPath: '/api/cart'
+      preLoaderRoute: typeof ApiCartRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/(auth)/verify': {
@@ -381,7 +421,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   authRouteRoute: authRouteRouteWithChildren,
   CartRoute: CartRoute,
+  CheckoutRoute: CheckoutRoute,
   DashboardAdminRouteRoute: DashboardAdminRouteRouteWithChildren,
+  ApiCartRoute: ApiCartRoute,
   LookbookIdRoute: LookbookIdRoute,
   ProductsIdRoute: ProductsIdRoute,
   LookbookIndexRoute: LookbookIndexRoute,

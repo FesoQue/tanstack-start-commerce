@@ -1,28 +1,30 @@
-import { createFileRoute } from "@tanstack/react-router";
-// import {
-//   useCart,
-//   useRemoveFromCart,
-//   useUpdateQuantity,
-//   useClearCart,
-// } from "#/lib/api/carts";
-// import { cartQuery } from "#/lib/api/carts";
-// import { getCartTotal } from "#/lib/server/cart";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import {
+  useCart,
+  useRemoveFromCart,
+  useUpdateQuantity,
+  useClearCart,
+  cartQuery,
+  getCartTotal,
+} from "#/lib/api/cart";
+import { useSession } from "#/lib/auth-client";
 
 export const Route = createFileRoute("/cart")({
-  // loader: ({ context: { queryClient } }) =>
-  //   queryClient.ensureQueryData(cartQuery),
+  loader: ({ context: { queryClient } }) =>
+    queryClient.ensureQueryData(cartQuery),
   component: CartComponent,
 });
 
 function CartComponent() {
-  // const { data: cart } = useCart();
+  const { data: cart } = useCart();
+  const { data: session } = useSession();
 
-  // const removeMutation = useRemoveFromCart();
-  // const updateQuantityMutation = useUpdateQuantity();
-  // const clearCartMutation = useClearCart();
+  const removeMutation = useRemoveFromCart();
+  const updateQuantityMutation = useUpdateQuantity();
+  const clearCartMutation = useClearCart();
 
-  // const hasItems = cart.items.length > 0;
-  // const subtotal = getCartTotal(cart);
+  const hasItems = cart.items.length > 0;
+  const subtotal = getCartTotal(cart);
 
   return (
     <main className="mx-auto flex max-w-4xl flex-col gap-8 px-4 py-10 sm:px-6 lg:px-8">
@@ -30,14 +32,14 @@ function CartComponent() {
         <h1 className="text-2xl font-medium tracking-tight text-neutral-900 sm:text-3xl">
           Cart
         </h1>
-        {/* <p className="text-sm text-neutral-600">
+        <p className="text-sm text-neutral-600">
           {hasItems
             ? "Review the pieces in your cart before checking out."
             : "Your cart is empty. Add pieces from the collection to get started."}
-        </p> */}
+        </p>
       </header>
 
-      {/* {hasItems ? (
+      {hasItems ? (
         <>
           <section className="space-y-4 rounded-xl border border-neutral-200 bg-white p-4 sm:p-5">
             <ul className="divide-y divide-neutral-100">
@@ -122,12 +124,12 @@ function CartComponent() {
               Taxes and shipping are calculated at checkout.
             </p>
             <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:gap-3">
-              <button
-                type="button"
-                className="w-full rounded-full bg-black px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-neutral-900"
+              <Link
+                to="/checkout"
+                className="w-full rounded-full bg-black px-4 py-2.5 text-center text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-neutral-900"
               >
                 Proceed to checkout
-              </button>
+              </Link>
               <button
                 type="button"
                 onClick={() => clearCartMutation.mutate()}
@@ -144,10 +146,26 @@ function CartComponent() {
             Your cart is empty.
           </p>
           <p className="mt-1 text-xs text-neutral-500">
-            Explore the collection and add items to your cart when you’re ready.
+            Explore the collection and add items to your cart when you're ready.
           </p>
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:justify-center">
+            {!session?.user && (
+              <Link
+                to="/login"
+                className="inline-flex items-center justify-center rounded-full bg-black px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-white hover:bg-neutral-900"
+              >
+                Sign in
+              </Link>
+            )}
+            <Link
+              to="/products"
+              className="inline-flex items-center justify-center rounded-full border border-neutral-200 px-4 py-2.5 text-xs font-medium uppercase tracking-[0.18em] text-neutral-700 hover:border-neutral-900 hover:text-neutral-900"
+            >
+              Continue shopping
+            </Link>
+          </div>
         </section>
-      )} */}
+      )}
     </main>
   );
 }

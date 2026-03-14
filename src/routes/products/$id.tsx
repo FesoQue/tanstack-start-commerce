@@ -3,6 +3,8 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { productQueries, type Product } from "#/lib/api/products";
 import { ProductsSkeleton } from "#/components/products/product.skeleton";
+import { useAddToCart } from "#/lib/api/cart";
+import toast from "react-hot-toast";
 
 export const Route = createFileRoute("/products/$id")({
   loader: ({ params, context: { queryClient } }) =>
@@ -24,6 +26,27 @@ function ProductDetailPage() {
   const { data: product } = useSuspenseQuery(
     productQueries.detail(Number(id))
   ) as { data: Product };
+  const addToCartMutation = useAddToCart();
+
+  const handleAddToCart = () => {
+    addToCartMutation.mutate(
+      {
+        productId: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Added to cart");
+        },
+        onError: () => {
+          toast.error("Failed to add to cart");
+        },
+      }
+    );
+  };
 
   return (
     <main className="mx-auto flex max-w-5xl flex-col gap-10 px-4 py-12 sm:px-6 lg:px-8">
@@ -64,11 +87,16 @@ function ProductDetailPage() {
           </p>
 
           <div className="mt-2 flex flex-wrap gap-3">
-            <button className="rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2 text-xs font-medium uppercase tracking-[0.15em] text-white transition-colors hover:bg-neutral-800">
-              Add to cart
+            <button
+              type="button"
+              onClick={handleAddToCart}
+              disabled={addToCartMutation.isPending}
+              className="rounded-full border border-neutral-900 bg-neutral-900 px-5 py-2 text-xs font-medium uppercase tracking-[0.15em] text-white transition-colors hover:bg-neutral-800 disabled:cursor-not-allowed disabled:opacity-70"
+            >
+              {addToCartMutation.isPending ? "Adding..." : "Add to cart"}
             </button>
             <button className="rounded-full border border-neutral-200 px-5 py-2 text-xs font-medium uppercase tracking-[0.15em] text-neutral-700 transition-colors hover:border-neutral-900 hover:text-neutral-900">
-              Save for later
+              Add to Wishlist
             </button>
           </div>
         </div>

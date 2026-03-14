@@ -1,16 +1,29 @@
 import { useSession, signOut } from "#/lib/auth-client";
-// import { useCart } from "#/lib/api/carts";
+import { useCart, getCartCount } from "#/lib/api/cart";
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
-// import { getCartCount } from "#/lib/server/cart";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Header() {
   const { data: session, isPending } = useSession();
-  // const { data: cart } = useCart();
+  const { data: cart } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isNavOpen, setIsNavOpen] = useState(false);
-  // const cartCount = getCartCount(cart);
+  const cartCount = getCartCount(cart);
+  const queryClient = useQueryClient();
+
+  const handleSignOut = async () => {
+    setIsMenuOpen(false);
+    setIsNavOpen(false);
+    await signOut();
+    // Immediately wipe the cart from cache so stale items don't show
+    queryClient.setQueryData(["cart"], {
+      userId: null,
+      items: [],
+      updatedAt: new Date().toISOString(),
+    });
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-b-gray-300 px-4 sm:px-8 lg:px-12 backdrop-blur-lg bg-white/80">
@@ -53,9 +66,11 @@ export default function Header() {
               <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gray-200 text-gray-700 hover:bg-gray-50">
                 <ShoppingCart className="h-4 w-4" />
               </div>
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-medium text-white">
-                0
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-medium text-white">
+                  {cartCount > 9 ? "9+" : cartCount}
+                </span>
+              )}
             </Link>
             <div className="relative flex items-center gap-2">
               {isPending ? (
@@ -88,10 +103,7 @@ export default function Header() {
                       <div className="my-1 h-px bg-gray-100" />
                       <button
                         type="button"
-                        onClick={() => {
-                          setIsMenuOpen(false);
-                          void signOut();
-                        }}
+                        onClick={handleSignOut}
                         className="flex w-full items-center px-3 py-1.5 text-left text-[11px] font-medium uppercase tracking-[0.16em] text-gray-700 hover:bg-gray-50"
                       >
                         Log out
@@ -118,17 +130,18 @@ export default function Header() {
             </div>
           </div>
 
-          <div className="sm:hidden flex items-center gap-10">
-            {/* cart icon */}
+          <div className="sm:hidden flex items-center gap-8">
             <Link
               to="/cart"
-              className="relative inline-flex items-center gap-2 text-gray-700 hover:text-black"
+              className="relative inline-flex items-center gap-2 text-gray-700 hover:text-black "
               onClick={() => setIsNavOpen(false)}
             >
               <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -right-3 -top-2 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-medium text-white">
-                0
-              </span>
+              {cartCount > 0 && (
+                <span className="absolute -right-3 -top-2 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-black px-1 text-[10px] font-medium text-white">
+                  {cartCount > 9 ? "9+" : cartCount}
+                </span>
+              )}
             </Link>
 
             {/* Mobile hamburger */}
@@ -179,10 +192,7 @@ export default function Header() {
               ) : session?.user ? (
                 <button
                   type="button"
-                  onClick={() => {
-                    setIsNavOpen(false);
-                    void signOut();
-                  }}
+                  onClick={handleSignOut}
                   className="w-full rounded-full border border-gray-300 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.16em] text-gray-700 hover:bg-gray-50"
                 >
                   Log out
