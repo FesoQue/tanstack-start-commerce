@@ -16,12 +16,18 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>;
 
+const loginSearchSchema = z.object({
+  redirect: z.string().optional(),
+});
+
 export const Route = createFileRoute("/(auth)/login")({
+  validateSearch: loginSearchSchema,
   component: LoginPage,
 });
 
 function LoginPage() {
   const router = useRouter();
+  const { redirect: redirectTo } = Route.useSearch();
   const queryClient = useQueryClient();
 
   const {
@@ -49,7 +55,7 @@ function LoginPage() {
     await queryClient.invalidateQueries({ queryKey: ["cart"] });
 
     toast.success("Login successful!");
-    router.navigate({ to: "/" });
+    router.navigate({ to: redirectTo ?? "/" });
   };
 
   return (

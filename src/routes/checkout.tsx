@@ -5,8 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useCart, cartQuery, getCartTotal, useClearCart } from "#/lib/api/cart";
 import { useSession } from "#/lib/auth-client";
 import { redirect } from "@tanstack/react-router";
+import { getSession } from "#/lib/server/session";
 import toast from "react-hot-toast";
-import { ChevronLeft, Lock } from "lucide-react";
+import { Lock as LockIcon } from "lucide-react";
 
 const checkoutSchema = z.object({
   email: z.string().min(1, "Email is required").email("Invalid email"),
@@ -37,6 +38,11 @@ type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
 export const Route = createFileRoute("/checkout")({
   beforeLoad: async ({ context }) => {
+    const session = await getSession();
+    if (!session) {
+      throw redirect({ to: "/login", search: { redirect: "/checkout" } });
+    }
+
     const cart = await context.queryClient.ensureQueryData(cartQuery);
     if (!cart.items.length) {
       throw redirect({ to: "/cart" });
@@ -224,7 +230,7 @@ function CheckoutPage() {
                 Payment
               </h2>
               <span className="inline-flex items-center gap-1 text-[11px] text-neutral-400">
-                <Lock className="h-3 w-3" />
+                <LockIcon className="h-3 w-3" />
                 Secured &amp; encrypted
               </span>
             </div>

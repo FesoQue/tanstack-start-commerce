@@ -1,8 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
-import { auth } from "#/lib/auth";
 import { db } from "#/lib/db";
 import type { Cart, CartItem } from "#/lib/api/cart";
+import { getSession } from "./session";
 
 export const getCartFn = createServerFn({ method: "GET" }).handler(
   async (): Promise<{
@@ -11,11 +10,7 @@ export const getCartFn = createServerFn({ method: "GET" }).handler(
     items: CartItem[];
     updatedAt: string;
   }> => {
-    const request = getRequest();
-
-    const session = await auth.api.getSession({
-      headers: request.headers,
-    });
+    const session = await getSession();
 
     if (!session) {
       return { userId: null, items: [], updatedAt: new Date().toISOString() };

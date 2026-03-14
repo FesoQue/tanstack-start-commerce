@@ -1,8 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
-import { getRequest } from "@tanstack/react-start/server";
-import { auth } from "#/lib/auth";
 import { db } from "#/lib/db";
 import type { WishlistItem } from "#/lib/api/wishlist";
+import { getSession } from "./session";
 
 // MongoDB document shape (updatedAt is a real Date from the DB)
 type WishlistDocument = {
@@ -17,11 +16,6 @@ type SerializedWishlist = {
   items: WishlistItem[];
   updatedAt: string;
 };
-
-async function getSession() {
-  const request = getRequest();
-  return auth.api.getSession({ headers: request.headers });
-}
 
 function serialize(
   doc: WishlistDocument & { _id?: { toString(): string } }

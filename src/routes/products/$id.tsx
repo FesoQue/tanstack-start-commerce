@@ -10,6 +10,7 @@ import {
   useIsInWishlist,
   wishlistQuery,
 } from "#/lib/api/wishlist";
+import { useSession } from "#/lib/auth-client";
 import toast from "react-hot-toast";
 import { Heart } from "lucide-react";
 
@@ -36,12 +37,18 @@ function ProductDetailPage() {
   const { data: product } = useSuspenseQuery(
     productQueries.detail(Number(id))
   ) as { data: Product };
+  const { data: session } = useSession();
   const addToCartMutation = useAddToCart();
   const addToWishlistMutation = useAddToWishlist();
   const removeFromWishlistMutation = useRemoveFromWishlist();
   const isInWishlist = useIsInWishlist(product.id);
 
   const handleAddToCart = () => {
+    if (!session?.user) {
+      toast.error("Please sign in to add items to your cart");
+      return;
+    }
+
     addToCartMutation.mutate(
       {
         productId: product.id,
@@ -52,12 +59,17 @@ function ProductDetailPage() {
       },
       {
         onSuccess: () => toast.success("Added to cart"),
-        onError: () => toast.error("Failed to add to cart"),
+        onError: (err) => toast.error(err.message || "Failed to add to cart"),
       }
     );
   };
 
   const handleToggleWishlist = () => {
+    if (!session?.user) {
+      toast.error("Please sign in to save items to your wishlist");
+      return;
+    }
+
     if (isInWishlist) {
       removeFromWishlistMutation.mutate(product.id, {
         onSuccess: () => toast.success("Removed from wishlist"),
