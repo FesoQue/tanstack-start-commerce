@@ -129,32 +129,6 @@ RESEND_API_KEY=re_replace_with_your_resend_api_key
 | --------- | ------------------------------------------------------------------------------ |
 | `mongodb` | Official MongoDB Node.js driver — stores users, sessions, carts, and wishlists |
 
-### Forms & Validation
-
-| Package               | Purpose                                   |
-| --------------------- | ----------------------------------------- |
-| `react-hook-form`     | Performant form state management          |
-| `@hookform/resolvers` | Connects Zod schemas to React Hook Form   |
-| `zod`                 | Schema declaration and runtime validation |
-
-### UI
-
-| Package           | Purpose                                                |
-| ----------------- | ------------------------------------------------------ |
-| `tailwindcss`     | Utility-first CSS framework                            |
-| `lucide-react`    | Icon library (Heart, ShoppingCart, Trash2, Lock, etc.) |
-| `react-hot-toast` | Toast notifications for success / error feedback       |
-
-### Testing & Dev
-
-| Package                    | Purpose                                 |
-| -------------------------- | --------------------------------------- |
-| `vitest`                   | Unit test runner                        |
-| `@testing-library/react`   | React component testing utilities       |
-| `@tanstack/react-devtools` | TanStack Query + Router dev tools panel |
-
----
-
 ## Project Structure
 
 ```
