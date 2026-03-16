@@ -1,4 +1,10 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  useRouter,
+  useNavigate,
+} from "@tanstack/react-router";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -55,9 +61,17 @@ export const Route = createFileRoute("/checkout")({
 
 function CheckoutPage() {
   const { data: cart } = useCart();
-  const { data: session } = useSession();
+  const { data: session, isPending } = useSession();
   const clearCart = useClearCart();
   const router = useRouter();
+  const navigate = useNavigate();
+
+  // Redirect away if the user logs out while on this page
+  useEffect(() => {
+    if (!isPending && !session?.user) {
+      navigate({ to: "/login", search: { redirect: "/checkout" } });
+    }
+  }, [session, isPending, navigate]);
 
   const subtotal = getCartTotal(cart);
   const shipping = subtotal > 100 ? 0 : 9.99;
